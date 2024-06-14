@@ -62,4 +62,14 @@ Leverage Python's datetime module to record timestamps for creation and updates.
 - Albina Ismayilova [@Albinnich](https://www.github.com/Albinnich)
 - Aziz Abbasov [@
 
+## 🔗 Links
+
+This is the link to our UML Design Diagram:
+(https://lucid.app/lucidchart/0996a8fa-00a1-42c1-8abb-8cbebfcbe424/edit?invitationId=inv_8815cb5f-b05c-4368-bc59-8b20b4c5ed96)
+
+
+
+## Screenshots
+
+https://files.fm/u/ddvjvh9pvr
 
