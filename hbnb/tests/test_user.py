@@ -3,6 +3,9 @@ from models.user import User
 
 class TestUser(unittest.test):
 
+    def setUp(self):
+        User.emails = set()
+
     def test_add_user(self):
         user = User(email="betty@gmail.com", first_name="Betty", last_name="Jan", password="ok")
         self.assertIsNotNone(user.id)
