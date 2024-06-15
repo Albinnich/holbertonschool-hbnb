@@ -60,7 +60,7 @@ Leverage Python's datetime module to record timestamps for creation and updates.
 ## Authors
 
 - Albina Ismayilova [@Albinnich](https://www.github.com/Albinnich)
-- Aziz Abbasov [@
+- Aziz Abbasov [@Az1z67](https://github.com/Az1z67)
 
 ## 🔗 Links
 
