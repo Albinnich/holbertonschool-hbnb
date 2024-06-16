@@ -23,4 +23,4 @@ class User:
         User.emails.remove(self.email)
 
     def __str__(self):
-        return f"[User] ({self.id}) {self.__dict__)"
+        return f"[User] ({self.id}) {self.__dict__}"
