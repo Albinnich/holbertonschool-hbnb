@@ -1,9 +1,9 @@
 import unittest
 from models.review import Review
 
-class TestReview(unittest.test):
+class TestReview(unittest.TestCase):
 
-    def add_test_review(self):
+    def test_add_review(self):
         review = Review(text="Nice host", user_id="123", place_id="456")
         self.assertIsNotNone(review.id)
         self.assertEqual(review.text, "Nice host")

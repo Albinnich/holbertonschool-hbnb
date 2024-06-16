@@ -18,7 +18,7 @@ class Place:
     def save(self):
         self.updated_at = datetime.now()
 
-    def delete(self)
+    def delete(self):
         pass
 
     def __str__(self):

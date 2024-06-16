@@ -1,7 +1,7 @@
 import unittest
 from models.user import User
 
-class TestUser(unittest.test):
+class TestUser(unittest.TestCase):
 
     def setUp(self):
         User.emails = set()

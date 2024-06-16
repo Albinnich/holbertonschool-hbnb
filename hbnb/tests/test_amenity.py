@@ -1,7 +1,7 @@
 import unittest
 from models.amenity import Amenity
 
-class TestAmenity(unittest.test):
+class TestAmenity(unittest.TestCase):
     def test_add_amenity(self):
         amenity = Amenity(name="Parking")
         self.assertIsNotNone(amenity.id)
