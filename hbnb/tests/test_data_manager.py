@@ -4,6 +4,7 @@ from persistence.data_manager import DataManager
 
 class TestDataManager(unittest.TestCase):
     def setUp(self):
+        User.emails = set()
         self.data_manager = DataManager()
         self.user = User(email="betty@gmail.com", first_name="Betty", last_name="Jan", password="ok")
         self.data_manager.save(self.user)
@@ -16,7 +17,7 @@ class TestDataManager(unittest.TestCase):
     def test_get(self):
         user = self.data_manager.get(self.user.id, "User")
         self.assertIsNotNone(user)
-        self.assertEqual(user.first_name, "Pyco")
+        self.assertEqual(user.first_name, "Betty")
 
     def test_update(self):
         self.user.first_name = "Betty"

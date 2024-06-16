@@ -1,7 +1,7 @@
 import unittest
 from models.country import Country
 
-class TestCountry(unittest.test):
+class TestCountry(unittest.TestCase):
 
     def test_add_country(self):
         country = Country(name="Fiji")

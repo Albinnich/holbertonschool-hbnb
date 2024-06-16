@@ -1,7 +1,7 @@
 import unittest
 from models.city import City
 
-class TestCity(unittest.test):
+class TestCity(unittest.TestCase):
 
     def test_add_city(self):
         city = City(name="Suva", country_id="123")
