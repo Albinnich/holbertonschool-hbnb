@@ -1,4 +1,5 @@
 from persistence.i_persistence_manager import IPersistenceManager
+from models.amenity import Amenity
 
 class DataManager(IPersistenceManager):
     def __init__(self):
@@ -23,3 +24,8 @@ class DataManager(IPersistenceManager):
     def delete(self, entity_id, entity_type):
         if entity_type in self.storage and entity_id in self.storage[entity_type]:
             del self.storage[entity_type][entity_id]
+
+    def list(self, entity_type):
+        if entity_type in self.storage:
+            return list(self.storage[entity_type].values())
+        return []
