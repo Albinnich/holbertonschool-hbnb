@@ -29,3 +29,4 @@ class DataManager(IPersistenceManager):
         if entity_type in self.storage:
             return list(self.storage[entity_type].values())
         return []
+

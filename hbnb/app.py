@@ -21,7 +21,8 @@ class AmenityList(Resource):
     @api.marshal_list_with(amenity_model)
     def get(self):
         """List all amenities"""
-        return data_manager.list('Amenity')
+        amenities = [amenity.to_dict() for amenity in data_manager.list('Amenity')]
+        return amenities
 
     @api.expect(amenity_model)
     @api.response(201, 'Amenity successfully created.')
@@ -35,7 +36,7 @@ class AmenityList(Resource):
                     return {'message': 'Amenity name already exists'}, 409
         new_amenity = Amenity(name=data['name'])
         data_manager.save(new_amenity)
-        return new_amenity, 201
+        return new_amenity.to_dict(), 201
 
 @api.route('/amenities/<string:amenity_id>')
 class Amenity(Resource):
@@ -45,7 +46,7 @@ class Amenity(Resource):
         """Retrieve a specific amenity by its ID"""
         amenity = data_manager.get(amenity_id, 'Amenity')
         if amenity:
-            return amenity
+            return amenity.to_dict()
         return {'message': 'Amenity not found'}, 404
 
     @api.expect(amenity_model)
@@ -59,7 +60,7 @@ class Amenity(Resource):
             amenity.name = data['name']
             amenity.save()
             data_manager.update(amenity)
-            return amenity, 200
+            return amenity.to_dict(), 200
         return {'message': 'Amenity not found'}, 404
 
     @api.response(204, 'Amenity successfully deleted.')
