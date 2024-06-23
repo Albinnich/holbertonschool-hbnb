@@ -1,76 +1,81 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 from flask_restx import Api, Resource, fields
-from models.amenity import Amenity
-from persistence.data_manager import DataManager
+import uuid
 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='HBnB API', description='Amenity Management API')
+api = Api(app, version='1.0', title='Places Management API',
+          description='APIs for managing places, cities, and amenities.')
 
-data_manager = DataManager()
+# Dummy data structures for demo (replace with actual database operations)
+cities = [{'id': '1', 'name': 'New York'}, {'id': '2', 'name': 'San Francisco'}]
+places = []
+amenities = [{'id': '1', 'name': 'WiFi'}, {'id': '2', 'name': 'Pool'}]
 
-# Define Amenity Model for API documentation
-amenity_model = api.model('Amenity', {
-    'id': fields.String(readOnly=True, description='The unique identifier of an amenity'),
-    'name': fields.String(required=True, description='Amenity name'),
-    'created_at': fields.DateTime(readOnly=True, description='Time when the amenity was created'),
-    'updated_at': fields.DateTime(readOnly=True, description='Time when the amenity was last updated')
+# Define data models
+place_model = api.model('Place', {
+    'name': fields.String(required=True, description='Place name'),
+    'description': fields.String(required=True, description='Place description'),
+    'address': fields.String(required=True, description='Place address'),
+    'city_id': fields.String(required=True, description='ID of the city where place is located'),
+    'latitude': fields.Float(required=True, description='Geographical latitude'),
+    'longitude': fields.Float(required=True, description='Geographical longitude'),
+    'host_id': fields.String(description='ID of the host'),
+    'number_of_rooms': fields.Integer(required=True, description='Number of rooms'),
+    'number_of_bathrooms': fields.Integer(required=True, description='Number of bathrooms'),
+    'price_per_night': fields.Float(required=True, description='Price per night'),
+    'max_guests': fields.Integer(required=True, description='Maximum number of guests'),
+    'amenity_ids': fields.List(fields.String, description='List of amenity IDs')
 })
 
-@api.route('/amenities')
-class AmenityList(Resource):
-    @api.marshal_list_with(amenity_model)
+# Endpoint implementations
+@api.route('/places')
+class Places(Resource):
+    @api.marshal_with(place_model)
     def get(self):
-        """List all amenities"""
-        amenities = [amenity.to_dict() for amenity in data_manager.list('Amenity')]
-        return amenities
+        """Retrieve all places"""
+        return places
 
-    @api.expect(amenity_model)
-    @api.response(201, 'Amenity successfully created.')
-    @api.response(409, 'Amenity name already exists.')
+    @api.expect(place_model, validate=True)
+    @api.response(201, 'Place successfully created.')
     def post(self):
-        """Create a new amenity"""
+        """Create a new place"""
         data = request.json
-        if data_manager.list('Amenity'):
-            for amenity in data_manager.list('Amenity'):
-                if amenity.name == data['name']:
-                    return {'message': 'Amenity name already exists'}, 409
-        new_amenity = Amenity(name=data['name'])
-        data_manager.save(new_amenity)
-        return new_amenity.to_dict(), 201
+        # Validate data here (implement according to requirements)
+        # Simulate ID generation for demo
+        data['id'] = str(uuid.uuid4())
+        places.append(data)
+        return data, 201
 
-@api.route('/amenities/<string:amenity_id>')
-class Amenity(Resource):
-    @api.marshal_with(amenity_model)
-    @api.response(404, 'Amenity not found.')
-    def get(self, amenity_id):
-        """Retrieve a specific amenity by its ID"""
-        amenity = data_manager.get(amenity_id, 'Amenity')
-        if amenity:
-            return amenity.to_dict()
-        return {'message': 'Amenity not found'}, 404
+@api.route('/places/<string:place_id>')
+class Place(Resource):
+    @api.marshal_with(place_model)
+    def get(self, place_id):
+        """Retrieve details of a specific place"""
+        for place in places:
+            if place['id'] == place_id:
+                return place
+        api.abort(404, f"Place {place_id} not found")
 
-    @api.expect(amenity_model)
-    @api.response(200, 'Amenity successfully updated.')
-    @api.response(404, 'Amenity not found.')
-    def put(self, amenity_id):
-        """Update an existing amenity"""
+    @api.expect(place_model, validate=True)
+    @api.response(204, 'Place successfully updated.')
+    def put(self, place_id):
+        """Update details of a specific place"""
         data = request.json
-        amenity = data_manager.get(amenity_id, 'Amenity')
-        if amenity:
-            amenity.name = data['name']
-            amenity.save()
-            data_manager.update(amenity)
-            return amenity.to_dict(), 200
-        return {'message': 'Amenity not found'}, 404
+        for index, place in enumerate(places):
+            if place['id'] == place_id:
+                places[index] = data
+                return '', 204
+        api.abort(404, f"Place {place_id} not found")
 
-    @api.response(204, 'Amenity successfully deleted.')
-    @api.response(404, 'Amenity not found.')
-    def delete(self, amenity_id):
-        """Delete a specific amenity by its ID"""
-        if data_manager.get(amenity_id, 'Amenity'):
-            data_manager.delete(amenity_id, 'Amenity')
-            return '', 204
-        return {'message': 'Amenity not found'}, 404
+    @api.response(204, 'Place successfully deleted.')
+    def delete(self, place_id):
+        """Delete a specific place"""
+        for index, place in enumerate(places):
+            if place['id'] == place_id:
+                del places[index]
+                return '', 204
+        api.abort(404, f"Place {place_id} not found")
 
+# Run the application
 if __name__ == '__main__':
     app.run(debug=True)
