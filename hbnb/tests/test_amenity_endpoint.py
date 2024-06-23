@@ -2,6 +2,7 @@ import unittest
 import json
 from app import app, data_manager
 from models.amenity import Amenity
+from persistence.data_manager import data_manager
 
 class TestAmenityEndpoints(unittest.TestCase):
     def setUp(self):
