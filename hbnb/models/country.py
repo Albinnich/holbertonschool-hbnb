@@ -1,18 +1,13 @@
-import uuid
-from datetime import datetime
+from models.base_model import BaseModel
 
-class Country:
+class Country(BaseModel):
     def __init__(self, name):
-        self.id = str(uuid.uuid4())
+        super().__init__()
         self.name = name
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
 
-    def save(self):
-        self.updated_at = datetime.now()
-
-    def delete(self):
-        pass
-
-    def __str__(self):
-        return f"[Country] ({self.id}) {self.__dict__}"
+    def to_dict(self):
+        country_dict = super().to_dict()
+        country_dict.update({
+            'name': self.name
+        })
+        return country_dict

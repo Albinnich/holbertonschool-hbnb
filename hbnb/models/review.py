@@ -1,20 +1,19 @@
-import uuid
-from datetime import datetime
+from models.base_model import BaseModel
 
-class Review:
-    def __init__(self, text, user_id, place_id):
-        self.id = str(uuid.uuid4())
-        self.text = text
-        self.user_id = user_id
-        self.place_id = place_id
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+class Review(BaseModel):
+    def __init__(self, user, place, rating, comment):
+        super().__init__()
+        self.user = user
+        self.place = place
+        self.rating = rating
+        self.comment = comment
 
-    def __str__(self):
-        return f"[Review] ({self.id}) {self.__dict__}"
-
-    def save(self):
-        self.updated_at = datetime.now()
-
-    def delete(self):
-        pass
+    def to_dict(self):
+        review_dict = super().to_dict()
+        review_dict.update({
+            'user': self.user.to_dict(),
+            'place': self.place.to_dict(),
+            'rating': self.rating,
+            'comment': self.comment
+        })
+        return review_dict

@@ -1,19 +1,15 @@
-import uuid
-from datetime import datetime
+from models.base_model import BaseModel
 
-class City:
-    def __init__(self, name, country_id):
-        self.id = str(uuid.uuid4())
+class City(BaseModel):
+    def __init__(self, name, country):
+        super().__init__()
         self.name = name
-        self.country_id = country_id
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        self.country = country
 
-    def save(self):
-        self.updated_at = datetime.now()
-
-    def delete(self):
-        pass
-
-    def __str__(self):
-        return f"[City] ({self.id}) {self.__dict__}"
+    def to_dict(self):
+        city_dict = super().to_dict()
+        city_dict.update({
+            'name': self.name,
+            'country': self.country.to_dict()
+        })
+        return city_dict

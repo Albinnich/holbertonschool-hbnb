@@ -1,54 +1,44 @@
-import uuid
-from datetime import datetime
+from models.base_model import BaseModel
 
-class Place:
-    def __init__(self, name, description, address, city_id, latitude, longitude, host_id, number_of_rooms, number_of_bathrooms, price_per_night, max_guests, amenity_ids):
-        self.id = None  # Assume this is set by the DataManager
+class Place(BaseModel):
+    def __init__(self, name, description, address, city, latitude, longitude, host, num_rooms, bathrooms, price_per_night, max_guests):
+        super().__init__()
         self.name = name
         self.description = description
         self.address = address
-        self.city_id = city_id
+        self.city = city
         self.latitude = latitude
         self.longitude = longitude
-        self.host_id = host_id
-        self.number_of_rooms = number_of_rooms
-        self.number_of_bathrooms = number_of_bathrooms
+        self.host = host
+        self.num_rooms = num_rooms
+        self.bathrooms = bathrooms
         self.price_per_night = price_per_night
         self.max_guests = max_guests
-        self.amenity_ids = amenity_ids
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        self.amenities = []
+        self.reviews = []
 
-    def update(self, name=None, description=None, address=None, city_id=None, latitude=None, longitude=None, number_of_rooms=None, number_of_bathrooms=None, price_per_night=None, max_guests=None, amenity_ids=None):
-        if name:
-            self.name = name
-        if description:
-            self.description = description
-        if address:
-            self.address = address
-        if city_id:
-            self.city_id = city_id
-        if latitude:
-            self.latitude = latitude
-        if longitude:
-            self.longitude = longitude
-        if number_of_rooms:
-            self.number_of_rooms = number_of_rooms
-        if number_of_bathrooms:
-            self.number_of_bathrooms = number_of_bathrooms
-        if price_per_night:
-            self.price_per_night = price_per_night
-        if max_guests:
-            self.max_guests = max_guests
-        if amenity_ids:
-            self.amenity_ids = amenity_ids
-        self.updated_at = datetime.now()
+    def add_amenity(self, amenity):
+        if amenity not in self.amenities:
+            self.amenities.append(amenity)
 
-    def save(self):
-        self.updated_at = datetime.now()
+    def add_review(self, review):
+        self.reviews.append(review)
 
-    def delete(self):
-        pass
-
-    def __str__(self):
-        return f"[Place] ({self.id}) {self.__dict__}"
+    def to_dict(self):
+        place_dict = super().to_dict()
+        place_dict.update({
+            'name': self.name,
+            'description': self.description,
+            'address': self.address,
+            'city': self.city,
+            'latitude': self.latitude,
+            'longitude': self.longitude,
+            'host': self.host.to_dict(),
+            'num_rooms': self.num_rooms,
+            'bathrooms': self.bathrooms,
+            'price_per_night': self.price_per_night,
+            'max_guests': self.max_guests,
+            'amenities': [amenity.to_dict() for amenity in self.amenities],
+            'reviews': [review.to_dict() for review in self.reviews]
+        })
+        return place_dict

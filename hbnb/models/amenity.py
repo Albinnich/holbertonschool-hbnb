@@ -1,28 +1,15 @@
-import uuid
-from datetime import datetime
-import json
+from models.base_model import BaseModel
 
-class Amenity:
-    def __init__(self, name):
-        self.id = str(uuid.uuid4())
+class Amenity(BaseModel):
+    def __init__(self, name, description):
+        super().__init__()
         self.name = name
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
-
-    def save(self):
-        self.updated_at = datetime.now()
+        self.description = description
 
     def to_dict(self):
-        return {
-            'id': self.id,
+        amenity_dict = super().to_dict()
+        amenity_dict.update({
             'name': self.name,
-            'created_at': self.created_at.isoformat(),
-            'updated_at': self.updated_at.isoformat()
-        }
-
-    def __str__(self):
-        return f"[Amenity] ({self.id}) {self.__dict__}"
-
-    def __repr__(self):
-        return self.__str__()
-
+            'description': self.description
+        })
+        return amenity_dict

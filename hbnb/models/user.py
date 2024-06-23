@@ -1,26 +1,18 @@
-import uuid
-from datetime import datetime
+from models.base_model import BaseModel
 
-class User:
-    emails = set()
-
-    def __init__(self, email, first_name, last_name, password):
-        if email in User.emails:
-            raise ValueError("Email is not available")
-        self.id = str(uuid.uuid4())
+class User(BaseModel):
+    def __init__(self, email, password, first_name, last_name):
+        super().__init__()
         self.email = email
+        self.password = password
         self.first_name = first_name
         self.last_name = last_name
-        self.password = password
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
-        User.emails.add(email)
 
-    def save(self):
-        self.updated_at = datetime.now()
-
-    def delete(self):
-        User.emails.remove(self.email)
-
-    def __str__(self):
-        return f"[User] ({self.id}) {self.__dict__}"
+    def to_dict(self):
+        user_dict = super().to_dict()
+        user_dict.update({
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name
+        })
+        return user_dict
