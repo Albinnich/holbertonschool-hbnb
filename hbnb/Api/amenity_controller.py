@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request # type: ignore
 
 from models.amenity import Amenity
 from Repository.amenity_repository import AmenityRepository
