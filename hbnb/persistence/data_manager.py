@@ -64,10 +64,10 @@ class DataManager:
         self._save_data()
         
         # Check if user with the same email already exists
-        if self.get_user_by_email(user.email):
+        if self.get_user_by_email(User.email):
             raise ValueError("User with this email already exists")
 
-        user_dict = user.to_dict()
+        user_dict = User.to_dict()
         user_dict['id'] = len(self.data.get('users', [])) + 1  # Generate unique ID
         if 'users' not in self.data:
             self.data['users'] = []
@@ -130,7 +130,7 @@ class DataManager:
                     return Country(**country_data)
         return None
 
-     def get_cities(self):
+    def get_cities(self):
         if 'cities' in self.data:
             return [City(**city_data) for city_data in self.data['cities']]
         return []
