@@ -2,6 +2,7 @@ import re
 
 from Repository.base_repository import BaseRepository
 
+
 class UserService(BaseRepository):
     def __init__(self):
         super().__init__()
